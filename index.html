@@ -116,13 +116,13 @@ input:focus,textarea:focus,select:focus{border-color:var(--navy);outline:0}
 <input type="file" id="cam" accept="image/*" capture="environment" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" tabindex="-1">
 <div id="toast" role="status"></div><div id="ov" class="ov"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// ====== KREDENSIAL SUPABASE ANDA ======
+// ====== KREDENSIAL SUPABASE (hanya kunci publishable, aman di browser) ======
 const SUPABASE_URL="https://xohlan0niwhb6pejzeztza.supabase.co";
-const SUPABASE_KEY="eyJhbGciOi... (masukkan anon key asli dari Supabase Dashboard -> Project Settings -> API di sini)";
-// ======================================
+const SUPABASE_KEY="sb_publishable_xohlaN0NiWhb6pejZeZTzA_aPUt7WvL";
+// ============================================================================
 
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -132,9 +132,12 @@ const hm=t=>t?new Date(t).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-d
 const fmtD=d=>new Date(d+"T00:00:00").toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 
 let sb=null,isOwner=true,orders=[],tab="aktif",drv="",pend=null,busy=false,tt=null,started=false;
+try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)}catch(e){console.error(e)}
 
 async function startDirect(roleChoice){
-  if(started)return;started=true;
+  if(started)return;
+  if(!sb)return alert("Koneksi Supabase gagal dibuat. Muat ulang halaman.");
+  started=true;
   isOwner = (roleChoice === 'owner');
   $("login").style.display="none";
   ["hdr","nav"].forEach(i=>$(i).style.display="block");
@@ -142,11 +145,11 @@ async function startDirect(roleChoice){
   $("app").style.display="block";
   $("role").textContent=isOwner?"Owner / Staff":"Driver";
   $("zone").style.display=isOwner?"block":"none";
-  
+
   if(!isOwner){try{drv=localStorage.getItem("drv")||""}catch(e){}}
   await load();
-  
-  sb.channel("orders-live").on("postgres_changes",{event:"*",schema:"public",table:"orders"},()=>{if(!busy)load()}).subscribe();
+
+  try{sb.channel("orders-live").on("postgres_changes",{event:"*",schema:"public",table:"orders"},()=>{if(!busy)load()}).subscribe()}catch(e){console.error(e)}
   setInterval(()=>{if(!busy&&!document.hidden)load()},20000);
 }
 
@@ -295,8 +298,4 @@ $("pdf").onclick=async()=>{
 };
 
 $("out").onclick=()=>location.reload();
-
-document.addEventListener("DOMContentLoaded", () => {
- sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-});
 </script></body></html>
