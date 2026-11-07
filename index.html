@@ -119,10 +119,10 @@ input:focus,textarea:focus,select:focus{border-color:var(--navy);outline:0}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// ====== ISI SUPABASE URL DAN KEY ANDA DI BAWAH INI ======
-const SUPABASE_URL="ISI_PROJECT_URL";
-const SUPABASE_KEY="ISI_ANON_PUBLIC_KEY";
-// ========================================================
+// ====== KREDENSIAL SUPABASE ANDA (OTOMATIS TERPASANG) ======
+const SUPABASE_URL="https://xohlan0niwhb6pejzeztza.supabase.co";
+const SUPABASE_KEY="sb_publishable_xohlaN0NiWhb6pejZeZTzA_aPUt7WvL";
+// ============================================================
 
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -289,7 +289,7 @@ $("pdf").onclick=async()=>{
    doc.setFont("helvetica","normal");doc.text(t2,M,y+4);y+=t2.length*5;doc.text(t3,M,y+4);y+=7;
    if(img){doc.addImage(img.data,"JPEG",M,y,iw,ih);y+=ih+4}else{doc.text(o.hasPhoto?"(foto gagal dimuat)":"(tanpa foto)",M,y+3);y+=6}
    doc.setDrawColor(200);doc.line(M,y,W-M,y);y+=5}
-  doc.save("rekap-"+d+"-"+(drv||"semua").replace(/\W+/g,"-")+".pdf");toast("PDF siap diunduh")
+  doc.save("rekap-"+d+"-"+(drv||"semua").replace(/\W+/g, "-")+".pdf");toast("PDF siap diunduh")
  }catch(err){toast("PDF gagal dibuat: "+(err.message||err),1)}
  finally{busy=false;$("pdf").disabled=false}
 };
@@ -297,10 +297,6 @@ $("pdf").onclick=async()=>{
 $("out").onclick=()=>location.reload();
 
 document.addEventListener("DOMContentLoaded", () => {
- if(SUPABASE_URL.startsWith("ISI") || SUPABASE_KEY.startsWith("ISI")) {
-  $("login").innerHTML = '<div class="box" style="text-align:center"><h3 class="red">Belum Dikonfigurasi</h3><p class="mu">Harap masukkan SUPABASE_URL dan SUPABASE_KEY di dalam script kode HTML.</p></div>';
-  return;
- }
  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 });
 </script></body></html>
