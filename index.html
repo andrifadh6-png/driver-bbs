@@ -119,10 +119,10 @@ input:focus,textarea:focus,select:focus{border-color:var(--navy);outline:0}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// ====== KREDENSIAL SUPABASE ANDA (OTOMATIS TERPASANG) ======
+// ====== KREDENSIAL SUPABASE ANDA ======
 const SUPABASE_URL="https://xohlan0niwhb6pejzeztza.supabase.co";
 const SUPABASE_KEY="sb_publishable_xohlaN0NiWhb6pejZeZTzA_aPUt7WvL";
-// ============================================================
+// ======================================
 
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -300,3 +300,4 @@ document.addEventListener("DOMContentLoaded", () => {
  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 });
 </script></body></html>
+
