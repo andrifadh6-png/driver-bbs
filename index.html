@@ -119,10 +119,10 @@ input:focus,textarea:focus,select:focus{border-color:var(--navy);outline:0}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// ====== GANTI DENGAN KREDENSIAL SUPABASE ANDA ======
+// ====== ISI SUPABASE URL DAN KEY ANDA DI BAWAH INI ======
 const SUPABASE_URL="ISI_PROJECT_URL";
 const SUPABASE_KEY="ISI_ANON_PUBLIC_KEY";
-// ==================================================
+// ========================================================
 
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -210,7 +210,7 @@ function render(){
  $("list").style.display=tab==="rekap"?"none":"block";$("rekap").style.display=tab==="rekap"?"block":"none";$("fab").style.display=isOwner&&tab!=="rekap"?"flex":"none";
  const l=(tab==="aktif"?act:dn).filter(o=>!drv||o.driver===drv);
  const emp=tab==="aktif"?'<div class="empty"><b>Tidak ada order aktif</b>'+(isOwner?"Tekan Order baru untuk menambah.":"Tunggu order dari owner.")+'</div>':'<div class="empty"><b>Belum ada yang selesai</b>Tidak ada pengantaran selesai pada tanggal ini.</div>';
- $("list").style.display === "block" && ($("list").innerHTML=tab==="riw"?hist():l.length?l.map(card).join(""):emp);
+ $("list").innerHTML=tab==="riw"?hist():l.length?l.map(card).join(""):emp;
 }
 
 async function wipe(list,label){
