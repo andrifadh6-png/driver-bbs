@@ -63,6 +63,13 @@ input:focus,textarea:focus,select:focus{border-color:var(--navy);outline:0}
   <p class="mu" style="margin-bottom:16px;font-size:14px">Silakan pilih peran Anda untuk mulai menggunakan aplikasi:</p>
   <button class="btn n" type="button" style="width:100%;margin-bottom:10px" onclick="startDirect('owner')">Masuk sebagai Owner / Staff</button>
   <button class="btn y" type="button" style="width:100%;color:var(--navy)" onclick="startDirect('driver')">Masuk sebagai Driver</button>
+  <button class="btn t" type="button" style="margin-top:8px" onclick="document.getElementById('cfgp').style.display='block'">Pengaturan koneksi</button>
+  <div id="cst" class="mu" style="font-size:14px;margin-top:4px;min-height:20px"></div>
+  <div id="cfgp" style="display:none;text-align:left;margin-top:8px">
+   <label for="cu">Project URL</label><input id="cu" placeholder="https://xxxx.supabase.co" autocapitalize="off" autocorrect="off">
+   <label for="ck">Publishable key</label><input id="ck" placeholder="sb_publishable_..." autocapitalize="off" autocorrect="off">
+   <button class="btn n" type="button" style="width:100%" onclick="saveCfg()">Simpan dan tes koneksi</button>
+  </div>
  </div>
 </div>
 
@@ -132,7 +139,23 @@ const hm=t=>t?new Date(t).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-d
 const fmtD=d=>new Date(d+"T00:00:00").toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 
 let sb=null,isOwner=true,orders=[],tab="aktif",drv="",pend=null,busy=false,tt=null,started=false;
-try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)}catch(e){console.error(e)}
+let cfg={u:SUPABASE_URL,k:SUPABASE_KEY};
+try{const c=JSON.parse(localStorage.getItem("sbcfg")||"null");if(c&&c.u&&c.k)cfg=c}catch(e){}
+function mk(){try{sb=window.supabase.createClient(cfg.u,cfg.k)}catch(e){console.error(e);sb=null}}
+mk();
+async function testCfg(){const t=$("cst");t.textContent="Mengecek koneksi…";
+ try{const r=await fetch(cfg.u+"/rest/v1/orders?select=id&limit=1",{headers:{apikey:cfg.k}});
+  if(r.ok)t.textContent="Koneksi OK";
+  else if(r.status===401||r.status===403)t.textContent="Akses ditolak ("+r.status+"). Cek publishable key dan policy RLS.";
+  else if(r.status===404)t.textContent="Tabel orders tidak ditemukan. Jalankan SQL pembuatan tabel.";
+  else t.textContent="Server membalas "+r.status+": "+(await r.text()).slice(0,120)
+ }catch(e){t.textContent="Tidak bisa terhubung ke "+cfg.u+". Cek Project URL di Pengaturan koneksi."}}
+async function saveCfg(){let u=$("cu").value.trim().replace(/\/+$/,""),k=$("ck").value.trim();
+ if(u&&!/^https?:\/\//.test(u))u="https://"+u;
+ cfg={u:u||cfg.u,k:k||cfg.k};
+ try{localStorage.setItem("sbcfg",JSON.stringify(cfg))}catch(e){}
+ mk();await testCfg()}
+$("cu").value=cfg.u;$("ck").value=cfg.k;
 
 async function startDirect(roleChoice){
   if(started)return;
@@ -298,4 +321,5 @@ $("pdf").onclick=async()=>{
 };
 
 $("out").onclick=()=>location.reload();
+testCfg();
 </script></body></html>
