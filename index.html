@@ -127,7 +127,7 @@ input:focus,textarea:focus,select:focus{border-color:var(--navy);outline:0}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 // ====== KREDENSIAL SUPABASE (hanya kunci publishable, aman di browser) ======
-const SUPABASE_URL="https://xohlan0niwhb6pejzeztza.supabase.co";
+const SUPABASE_URL="https://jauumbdwnnaukohhxtbd.supabase.co";
 const SUPABASE_KEY="sb_publishable_xohlaN0NiWhb6pejZeZTzA_aPUt7WvL";
 // ============================================================================
 
@@ -140,7 +140,7 @@ const fmtD=d=>new Date(d+"T00:00:00").toLocaleDateString("id-ID",{weekday:"long"
 
 let sb=null,isOwner=true,orders=[],tab="aktif",drv="",pend=null,busy=false,tt=null,started=false;
 let cfg={u:SUPABASE_URL,k:SUPABASE_KEY};
-try{const c=JSON.parse(localStorage.getItem("sbcfg")||"null");if(c&&c.u&&c.k)cfg=c}catch(e){}
+try{const c=JSON.parse(localStorage.getItem("sbcfg2")||"null");if(c&&c.u&&c.k)cfg=c}catch(e){}
 function mk(){try{sb=window.supabase.createClient(cfg.u,cfg.k)}catch(e){console.error(e);sb=null}}
 mk();
 async function testCfg(){const t=$("cst");t.textContent="Mengecek koneksi…";
@@ -153,7 +153,7 @@ async function testCfg(){const t=$("cst");t.textContent="Mengecek koneksi…";
 async function saveCfg(){let u=$("cu").value.trim().replace(/\/+$/,""),k=$("ck").value.trim();
  if(u&&!/^https?:\/\//.test(u))u="https://"+u;
  cfg={u:u||cfg.u,k:k||cfg.k};
- try{localStorage.setItem("sbcfg",JSON.stringify(cfg))}catch(e){}
+ try{localStorage.setItem("sbcfg2",JSON.stringify(cfg))}catch(e){}
  mk();await testCfg()}
 $("cu").value=cfg.u;$("ck").value=cfg.k;
 
